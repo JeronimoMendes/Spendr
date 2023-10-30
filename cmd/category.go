@@ -27,11 +27,27 @@ var categoryCmd = &cobra.Command{
 		if len(args) > 0 {
 			categories = args
 		} else {
-			categories = tracker.Categories
+			for _, category := range tracker.Categories {
+				categories = append(categories, category.Name)
+			}
 		}
-		for _, category := range categories {
-			totalAmount := -tracker.GetTotalExpensesByCategory(category)
-			fmt.Printf("Total amount spent on %s: €%.2f\n", category, totalAmount)
+		for _, categoryName := range categories {
+			category, err := tracker.GetCategory(categoryName)
+			if err != nil {
+				fmt.Println(err)
+				continue
+			}
+
+			totalAmount := -tracker.GetTotalExpensesByCategory(categoryName)
+
+			fmt.Printf("[%s]\n", categoryName)
+			if category.Limit > 0 {
+				fmt.Printf("Total amount spent: €%.2f\n", totalAmount)
+				fmt.Printf("Limit: €%.2f\n", category.Limit)
+				fmt.Printf("Remaining amount: €%.2f (%.2f%%)\n\n", category.Limit-totalAmount, totalAmount/category.Limit*100)
+			} else {
+				fmt.Printf("Total amount spent: €%.2f\n", totalAmount)
+			}
 		}
 	},
 }

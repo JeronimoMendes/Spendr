@@ -21,10 +21,15 @@ type Expense struct {
 	Category string
 }
 
+type Category struct {
+	Name string
+	Limit float64
+}
+
 type ExpenseTracker struct {
 	GCClient *gc_client.GoCardlessClient
 	Expenses []Expense
-	Categories []string
+	Categories []Category
 	LastExpensesUpdate time.Time
 }
 
@@ -35,7 +40,7 @@ func NewExpenseTracker(gcClient *gc_client.GoCardlessClient) *ExpenseTracker {
 		return &ExpenseTracker{
 			GCClient: gcClient,
 			Expenses: []Expense{},
-			Categories: []string{},
+			Categories: []Category{},
 			LastExpensesUpdate: time.Time{},
 		}
 	}
@@ -68,18 +73,22 @@ func (tracker *ExpenseTracker) GetExpenses(accountID string, full bool) []Expens
 	return expenses
 }
 
-func (tracker *ExpenseTracker) GetCategories() []string {
+func (tracker *ExpenseTracker) GetCategories() []Category {
 	return tracker.Categories
 }
 
-func (tracker *ExpenseTracker) CreateCategory(category string) {
+func (tracker *ExpenseTracker) CreateCategory(category Category) {
+	_, err := tracker.GetCategory(category.Name)
+	if err == nil {
+		panic("Category already exists")
+	}
 	tracker.Categories = append(tracker.Categories, category)
 	tracker.Save()
 }
 
 func (tracker *ExpenseTracker) DeleteCategory(category string) {
 	for i, cat := range tracker.Categories {
-		if cat == category {
+		if cat.Name == category {
 			tracker.Categories = append(tracker.Categories[:i], tracker.Categories[i+1:]...)
 		}
 	}
@@ -157,27 +166,29 @@ func (tracker *ExpenseTracker) expenseExists(id string) int {
 	return expenseIndex
 }
 
-func (tracker *ExpenseTracker) categoryExists(category string) bool {
+func (tracker *ExpenseTracker) GetCategory(category string) (Category, error) {
 	for _, cat := range tracker.Categories {
-		if cat == category {
-			return true
+		if cat.Name == category {
+			return cat, nil
 		}
 	}
-	return false
+
+	return Category{}, fmt.Errorf("Category %s not found", category)
 }
 
 
-func (tracker *ExpenseTracker) CategoriseExpense(id string, category string) {
+func (tracker *ExpenseTracker) CategoriseExpense(id string, categoryName string) {
 	expenseIndex := tracker.expenseExists(id)
 	if expenseIndex == -1 {
 		panic("Expense does not exist")
 	}
 
-	if !tracker.categoryExists(category) {
+	_, err := tracker.GetCategory(categoryName)
+	if err != nil {
 		panic("Category does not exist")
 	}
 
-	tracker.Expenses[expenseIndex].Category = category
+	tracker.Expenses[expenseIndex].Category = categoryName
 	tracker.Save()
 }
 

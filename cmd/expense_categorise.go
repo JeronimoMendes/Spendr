@@ -38,9 +38,14 @@ var categoriseCmd = &cobra.Command{
 				fmt.Fprintln(w, fmt.Sprintf("%s\t%s\t%.2f\t%s\t%s", expense.Id, expense.Description, expense.Amount, expense.Date, expense.Category))
 				category := ""
 				w.Flush()
+
+				categoriesNames := []string{}
+				for _, category := range tracker.Categories {
+					categoriesNames = append(categoriesNames, category.Name)
+				}
 				prompt := promptui.Select{
 					Label: "Select Category",
-					Items: append([]string{"skip"}, tracker.Categories...),
+					Items: append([]string{"skip"}, categoriesNames...),
 				}
 				_, category, err := prompt.Run()
 				if err != nil {

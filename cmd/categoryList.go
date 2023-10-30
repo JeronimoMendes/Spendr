@@ -4,6 +4,10 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"fmt"
+	"os"
+	"text/tabwriter"
+
 	"github.com/JeronimoMendes/expense-track/pkg/gc_client"
 	"github.com/JeronimoMendes/expense-track/pkg/tracker"
 	"github.com/spf13/cobra"
@@ -22,9 +26,17 @@ var categoryListCmd = &cobra.Command{
 		tracker := tracker.NewExpenseTracker(gc)
 
 		categories := tracker.GetCategories()
+
+		w := tabwriter.NewWriter(os.Stdout, 0, 0, 5, ' ', 0)
+		fmt.Fprintln(w, "Name\tLimit")
 		for _, category := range categories {
-			println(category)
+			if category.Limit == -1 {
+				fmt.Fprintln(w, fmt.Sprintf("%s\tNone", category.Name))
+			} else {
+				fmt.Fprintln(w, fmt.Sprintf("%s\t%.2f", category.Name, category.Limit))
+			}
 		}
+		defer w.Flush()
 	},
 }
 
