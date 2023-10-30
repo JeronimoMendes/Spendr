@@ -26,7 +26,7 @@ var categoriseCmd = &cobra.Command{
 		gc := gc_client.NewClient(secretKey, secretID)
 		tracker := tracker.NewExpenseTracker(gc)
 
-		if iteratively, _ := cmd.Flags().GetBool("iteratively"); iteratively && len(args) == 0 {
+		if len(args) == 0 {
 			expenses := tracker.GetExpensesByCategory("")
 			if len(expenses) == 0 {
 				fmt.Println("No expenses to categorise.")
@@ -77,5 +77,4 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// categoriseCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-	categoriseCmd.Flags().BoolP("iteratively", "i", false, "Go by all uncategorised expenses and categorise them")
 }
