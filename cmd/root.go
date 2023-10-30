@@ -15,9 +15,9 @@ var cfgFile string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "expense-track",
+	Use:   "spendr",
 	Short: "A CLI app to view bank account expenses and categorise them.",
-	Long: `expense-track allows the creation of categories with limit spending that will allow to better keep track
+	Long: `spendr allows the creation of categories with limit spending that will allow to better keep track
 of how you're using your money.`,
 }
 
@@ -37,7 +37,7 @@ func init() {
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.expense-track.yaml)")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.spendr.yaml)")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
@@ -54,7 +54,7 @@ func initConfig() {
 		home, err := os.UserHomeDir()
 		cobra.CheckErr(err)
 
-		// Search config in home directory with name ".expense-track" (without extension).
+		// Search config in home directory with name ".spendr" (without extension).
 		viper.AddConfigPath(home + "/.expense_track")
 		viper.SetConfigType("yaml")
 		viper.SetConfigName("config")

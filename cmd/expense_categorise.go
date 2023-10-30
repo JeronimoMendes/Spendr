@@ -8,8 +8,8 @@ import (
 	"os"
 	"text/tabwriter"
 
-	"github.com/JeronimoMendes/expense-track/pkg/gc_client"
-	"github.com/JeronimoMendes/expense-track/pkg/tracker"
+	"github.com/JeronimoMendes/spendr/pkg/gc_client"
+	"github.com/JeronimoMendes/spendr/pkg/tracker"
 	"github.com/manifoldco/promptui"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"

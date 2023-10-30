@@ -9,7 +9,7 @@ import (
 	"encoding/gob"
 	"os"
 
-	"github.com/JeronimoMendes/expense-track/pkg/gc_client"
+	"github.com/JeronimoMendes/spendr/pkg/gc_client"
 )
 
 type Expense struct {

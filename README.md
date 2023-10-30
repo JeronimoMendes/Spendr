@@ -1,4 +1,4 @@
-# Expense Track (better name pending)
+# Spendr
 
 ## Description
 This Golang cli app is a simple expense tracker. It allows you to connect to a bank account and download transactions. It then allows you to categorize those transactions and view reports on your spending.

@@ -1,4 +1,4 @@
-module github.com/JeronimoMendes/expense-track
+module github.com/JeronimoMendes/spendr
 
 go 1.21.3
 
@@ -33,4 +33,4 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
-replace github.com/JeronimoMendes/expense-track/pkg => ./pkg
+replace github.com/JeronimoMendes/spendr/pkg => ./pkg

@@ -6,8 +6,8 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/JeronimoMendes/expense-track/pkg/gc_client"
-	"github.com/JeronimoMendes/expense-track/pkg/tracker"
+	"github.com/JeronimoMendes/spendr/pkg/gc_client"
+	"github.com/JeronimoMendes/spendr/pkg/tracker"
 
 	"github.com/spf13/cobra"
 
