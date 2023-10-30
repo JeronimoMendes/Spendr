@@ -5,9 +5,12 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+	"text/tabwriter"
 
 	"github.com/JeronimoMendes/expense-track/pkg/gc_client"
 	"github.com/JeronimoMendes/expense-track/pkg/tracker"
+	"github.com/manifoldco/promptui"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -16,7 +19,6 @@ import (
 var categoriseCmd = &cobra.Command{
 	Use:   "categorise",
 	Short: "Set the category for an expense",
-	Args: cobra.ExactArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
 		secretID := viper.GetString("gc_secret_id")
 		secretKey := viper.GetString("gc_secret_key")
@@ -24,8 +26,37 @@ var categoriseCmd = &cobra.Command{
 		gc := gc_client.NewClient(secretKey, secretID)
 		tracker := tracker.NewExpenseTracker(gc)
 
-		tracker.CategoriseExpense(args[0], args[1])
-		fmt.Println("Expenses categorised.")
+		if iteratively, _ := cmd.Flags().GetBool("iteratively"); iteratively && len(args) == 0 {
+			expenses := tracker.GetExpensesByCategory("")
+			if len(expenses) == 0 {
+				fmt.Println("No expenses to categorise.")
+				return
+			}
+			for _, expense := range expenses {
+				w := tabwriter.NewWriter(os.Stdout, 0, 0, 5, ' ', 0)
+				fmt.Fprintln(w, "ID\tDescription\tAmount\tDate")
+				fmt.Fprintln(w, fmt.Sprintf("%s\t%s\t%.2f\t%s\t%s", expense.Id, expense.Description, expense.Amount, expense.Date, expense.Category))
+				category := ""
+				w.Flush()
+				prompt := promptui.Select{
+					Label: "Select Category",
+					Items: append([]string{"skip"}, tracker.Categories...),
+				}
+				_, category, err := prompt.Run()
+				if err != nil {
+					fmt.Printf("Prompt failed %v\n", err)
+					return
+				}
+
+				if category == "skip" {
+					continue
+				}
+				tracker.CategoriseExpense(expense.Id, category)
+			}
+		} else {
+			tracker.CategoriseExpense(args[0], args[1])
+			fmt.Println("Expenses categorised.")
+		}
 	},
 }
 
@@ -41,4 +72,5 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// categoriseCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	categoriseCmd.Flags().BoolP("iteratively", "i", false, "Go by all uncategorised expenses and categorise them")
 }

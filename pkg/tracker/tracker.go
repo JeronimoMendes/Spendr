@@ -184,7 +184,7 @@ func (tracker *ExpenseTracker) CategoriseExpense(id string, category string) {
 func (tracker *ExpenseTracker) GetExpensesByCategory(category string) []Expense {
 	var expenses []Expense
 	for _, expense := range tracker.Expenses {
-		if expense.Category == category {
+		if expense.Date.Month() == time.Now().Month() && expense.Category == category {
 			expenses = append(expenses, expense)
 		}
 	}
@@ -194,7 +194,7 @@ func (tracker *ExpenseTracker) GetExpensesByCategory(category string) []Expense 
 func (tracker *ExpenseTracker) GetTotalExpensesByCategory(category string) float64 {
 	var total float64
 	for _, expense := range tracker.Expenses {
-		if expense.Category == category {
+		if expense.Date.Month() == time.Now().Month() && expense.Category == category {
 			total += expense.Amount
 		}
 	}
