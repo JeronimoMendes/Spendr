@@ -1,27 +1,38 @@
 /*
 Copyright © 2023 NAME HERE <EMAIL ADDRESS>
-
 */
 package cmd
 
 import (
 	"fmt"
 
+	"github.com/JeronimoMendes/expense-track/pkg/gc_client"
+	"github.com/JeronimoMendes/expense-track/pkg/tracker"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 // categoryCmd represents the category command
 var categoryCmd = &cobra.Command{
 	Use:   "category",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Show information about category",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("category called")
+		secretID := viper.GetString("gc_secret_id")
+		secretKey := viper.GetString("gc_secret_key")
+
+		gc := gc_client.NewClient(secretKey, secretID)
+		tracker := tracker.NewExpenseTracker(gc)
+
+		var categories []string
+		if len(args) > 0 {
+			categories = args
+		} else {
+			categories = tracker.Categories
+		}
+		for _, category := range categories {
+			totalAmount := -tracker.GetTotalExpensesByCategory(category)
+			fmt.Printf("Total amount spent on %s: €%.2f\n", category, totalAmount)
+		}
 	},
 }
 
