@@ -6,9 +6,9 @@ This Golang cli app is a simple expense tracker. It allows you to connect to a b
 All data is stored locally on your machine. No data is sent to any third party.
 
 ## Roadmap
-- [ ] Connect to bank account
-- [ ] Download transactions
-- [ ] Categorize transactions
+- [x] Connect to bank account
+- [x] Download transactions
+- [x] Categorize transactions
 - [ ] View reports
 - [ ] Export data
 - [ ] Auto categorize transactions based on rules
