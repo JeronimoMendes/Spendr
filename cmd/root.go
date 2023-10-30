@@ -4,6 +4,7 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -54,15 +55,16 @@ func initConfig() {
 		cobra.CheckErr(err)
 
 		// Search config in home directory with name ".expense-track" (without extension).
-		viper.AddConfigPath(home)
+		viper.AddConfigPath(home + "/.expense_track")
 		viper.SetConfigType("yaml")
-		viper.SetConfigName(".expense-track")
+		viper.SetConfigName("config")
 		viper.Set("verbose", false)
 	}
 
 	viper.AutomaticEnv() // read in environment variables that match
 
 	// If a config file is found, read it in.
-	if err := viper.ReadInConfig(); err == nil {
+	if err := viper.ReadInConfig(); err != nil {
+		fmt.Println("Error reading config file:", err)
 	}
 }

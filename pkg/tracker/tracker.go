@@ -104,7 +104,7 @@ func getStateFilePath() string {
 		panic(err)
 	}
 
-	return home + "/.expense_track.gob"
+	return home + "/.expense_track/data.gob"
 }
 
 func (tracker *ExpenseTracker) updateExpenses(accountID string) {
