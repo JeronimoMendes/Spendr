@@ -1,4 +1,4 @@
-package cmd
+package expense
 
 import (
 	"fmt"
