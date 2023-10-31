@@ -2,6 +2,7 @@ package tracker
 
 import (
 	"fmt"
+	"math/rand"
 	"strings"
 	"time"
 
@@ -210,4 +211,32 @@ func (tracker *ExpenseTracker) GetTotalExpensesByCategory(category string) float
 		}
 	}
 	return total
+}
+
+func (tracker *ExpenseTracker) CreateExpense(description string, amount float64, currency string, date time.Time, category string) {
+
+	// id will be a random 32 char string
+	idInt := rand.Uint32()
+	idString := fmt.Sprintf("%x", idInt)
+
+	expense := Expense{
+		Id: idString,
+		Amount: amount,
+		Description: description,
+		Currency: currency,
+		Date: date,
+		Category: category,
+	}
+	tracker.Expenses = append(tracker.Expenses, expense)
+	tracker.Save()
+}
+
+func (tracker *ExpenseTracker) DeleteExpense(id string) {
+	expenseIndex := tracker.expenseExists(id)
+	if expenseIndex == -1 {
+		panic("Expense does not exist")
+	}
+
+	tracker.Expenses = append(tracker.Expenses[:expenseIndex], tracker.Expenses[expenseIndex+1:]...)
+	tracker.Save()
 }
