@@ -8,8 +8,10 @@ import (
 
 	"math"
 
+	"github.com/JeronimoMendes/spendr/cmd"
 	"github.com/JeronimoMendes/spendr/pkg/gc_client"
 	"github.com/JeronimoMendes/spendr/pkg/tracker"
+
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -67,7 +69,7 @@ var categoryCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(categoryCmd)
+	cmd.RootCmd.AddCommand(categoryCmd)
 
 	// Here you will define your flags and configuration settings.
 

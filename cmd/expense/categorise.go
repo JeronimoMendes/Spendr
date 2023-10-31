@@ -10,6 +10,7 @@ import (
 
 	"github.com/JeronimoMendes/spendr/pkg/gc_client"
 	"github.com/JeronimoMendes/spendr/pkg/tracker"
+
 	"github.com/manifoldco/promptui"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"

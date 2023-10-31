@@ -6,6 +6,7 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/JeronimoMendes/spendr/cmd"
 	"github.com/spf13/cobra"
 )
 
@@ -19,7 +20,7 @@ var expenseCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(expenseCmd)
+	cmd.RootCmd.AddCommand(expenseCmd)
 
 	// Here you will define your flags and configuration settings.
 
