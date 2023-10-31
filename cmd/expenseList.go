@@ -14,6 +14,7 @@ import (
 	"os"
 	"text/tabwriter"
 
+	"github.com/fatih/color"
 	"github.com/spf13/viper"
 )
 
@@ -33,11 +34,20 @@ var expenseListCmd = &cobra.Command{
 		update, _ := cmd.Flags().GetBool("update")
 		transactions := tracker.GetExpenses(account_id, full, update)	
 
+		red := color.New(color.FgRed).SprintFunc()
+		green := color.New(color.FgGreen).SprintFunc()
+
 		w := tabwriter.NewWriter(os.Stdout, 0, 0, 5, ' ', 0)
 		defer w.Flush()
 		fmt.Fprintln(w, "ID\tDescription\tAmount\tDate\tCategory")
 		for _, transaction := range transactions {
-			fmt.Fprintln(w, fmt.Sprintf("%s\t%s\t%.2f\t%s\t%s", transaction.Id, transaction.Description, transaction.Amount, transaction.Date, transaction.Category))
+			var amountColored string
+			if transaction.Amount < 0 {
+				amountColored = red(fmt.Sprintf("%.2f", transaction.Amount))
+			} else {
+				amountColored = green(fmt.Sprintf("%.2f", transaction.Amount))
+			}
+			fmt.Fprintln(w, fmt.Sprintf("%s\t%s\t%s\t%s\t%s", transaction.Id, transaction.Description, amountColored, transaction.Date, transaction.Category))
 		}
 	},
 }

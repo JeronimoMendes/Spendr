@@ -6,8 +6,11 @@ package cmd
 import (
 	"fmt"
 
+	"math"
+
 	"github.com/JeronimoMendes/spendr/pkg/gc_client"
 	"github.com/JeronimoMendes/spendr/pkg/tracker"
+	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -38,15 +41,26 @@ var categoryCmd = &cobra.Command{
 				continue
 			}
 
-			totalAmount := -tracker.GetTotalExpensesByCategory(categoryName)
+			totalAmount := math.Abs(tracker.GetTotalExpensesByCategory(categoryName))
 
+			red := color.New(color.FgRed).SprintFunc()
+			green := color.New(color.FgGreen).SprintFunc()
+	
 			fmt.Printf("[%s]\n", categoryName)
 			if category.Limit > 0 {
-				fmt.Printf("Total amount spent: €%.2f\n", totalAmount)
+				remainingAmount := category.Limit - totalAmount
+				var remainingAmountColored string
+				if remainingAmount < 0 {
+					remainingAmountColored = red(fmt.Sprintf("%.2f", remainingAmount))
+				} else {
+					remainingAmountColored = green(fmt.Sprintf("%.2f", remainingAmount))
+				}
+
+				fmt.Printf("Total amount: €%.2f (%.2f%%)\n", totalAmount, totalAmount/category.Limit*100)
 				fmt.Printf("Limit: €%.2f\n", category.Limit)
-				fmt.Printf("Remaining amount: €%.2f (%.2f%%)\n\n", category.Limit-totalAmount, totalAmount/category.Limit*100)
+				fmt.Printf("Remaining amount: €%s\n\n", remainingAmountColored)
 			} else {
-				fmt.Printf("Total amount spent: €%.2f\n\n", totalAmount)
+				fmt.Printf("Total amount: €%.2f\n\n", totalAmount)
 			}
 		}
 	},
