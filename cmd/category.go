@@ -46,7 +46,7 @@ var categoryCmd = &cobra.Command{
 				fmt.Printf("Limit: €%.2f\n", category.Limit)
 				fmt.Printf("Remaining amount: €%.2f (%.2f%%)\n\n", category.Limit-totalAmount, totalAmount/category.Limit*100)
 			} else {
-				fmt.Printf("Total amount spent: €%.2f\n", totalAmount)
+				fmt.Printf("Total amount spent: €%.2f\n\n", totalAmount)
 			}
 		}
 	},
