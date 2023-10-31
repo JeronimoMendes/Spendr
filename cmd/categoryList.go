@@ -29,6 +29,7 @@ var categoryListCmd = &cobra.Command{
 
 		w := tabwriter.NewWriter(os.Stdout, 0, 0, 5, ' ', 0)
 		fmt.Fprintln(w, "Name\tLimit")
+		fmt.Fprintln(w, "----\t-----")
 		for _, category := range categories {
 			if category.Limit == -1 {
 				fmt.Fprintln(w, fmt.Sprintf("%s\tNone", category.Name))

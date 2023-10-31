@@ -40,6 +40,7 @@ var expenseListCmd = &cobra.Command{
 		w := tabwriter.NewWriter(os.Stdout, 0, 0, 5, ' ', 0)
 		defer w.Flush()
 		fmt.Fprintln(w, "ID\tDescription\tAmount\tDate\tCategory")
+		fmt.Fprintln(w, "--\t-----------\t------\t----\t--------")
 		for _, transaction := range transactions {
 			var amountColored string
 			if transaction.Amount < 0 {
