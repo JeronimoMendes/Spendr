@@ -23,14 +23,12 @@ var createCmd = &cobra.Command{
 		gc := gc_client.NewClient(secretKey, secretID)
 		tracker_client := tracker.NewExpenseTracker(gc)
 
-		name, err := cmd.Flags().GetString("name")
-		if err != nil {
-			panic(err)
+		name, _ := cmd.Flags().GetString("name")
+		if name == "" {
+			fmt.Println("Name is required. Set it using the flag -n")
+			return
 		}
-		limit, err := cmd.Flags().GetFloat64("limit")
-		if err != nil {
-			limit = -1
-		}
+		limit, _ := cmd.Flags().GetFloat64("limit")
 
 		tracker_client.CreateCategory(tracker.Category{Name: name, Limit: limit})
 		fmt.Printf("Category %s created.\n", name)
@@ -51,5 +49,5 @@ func init() {
 	// createCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 
 	createCmd.Flags().StringP("name", "n", "", "Name of the category")
-	createCmd.Flags().Float64P("limit", "l", 0, "Limit of the category")
+	createCmd.Flags().Float64P("limit", "l", -1, "Limit of the category")
 }
