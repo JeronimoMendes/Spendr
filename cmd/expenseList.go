@@ -30,7 +30,8 @@ var expenseListCmd = &cobra.Command{
 		tracker := tracker.NewExpenseTracker(gc)
 
 		full, _ := cmd.Flags().GetBool("full")
-		transactions := tracker.GetExpenses(account_id, full)	
+		update, _ := cmd.Flags().GetBool("update")
+		transactions := tracker.GetExpenses(account_id, full, update)	
 
 		w := tabwriter.NewWriter(os.Stdout, 0, 0, 5, ' ', 0)
 		defer w.Flush()
@@ -56,4 +57,5 @@ func init() {
 
 	// add flag to determine if the query is full history
 	expenseListCmd.Flags().BoolP("full", "f", false, "List all expenses")
+	expenseListCmd.Flags().BoolP("update", "u", false, "Force update of expenses")
 }

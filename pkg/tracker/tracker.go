@@ -55,8 +55,8 @@ func NewExpenseTracker(gcClient *gc_client.GoCardlessClient) *ExpenseTracker {
 	return &expenseTracker
 }
 
-func (tracker *ExpenseTracker) GetExpenses(accountID string, full bool) []Expense {
-	if time.Since(tracker.LastExpensesUpdate).Hours() > 24 {
+func (tracker *ExpenseTracker) GetExpenses(accountID string, full bool, update bool) []Expense {
+	if time.Since(tracker.LastExpensesUpdate).Hours() > 24 || update {
 		tracker.updateExpenses(accountID)
 	}
 	if full {
