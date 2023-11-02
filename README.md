@@ -15,3 +15,5 @@ All data is stored locally on your machine. No data is sent to any third party.
 - [ ] Export data
 - [ ] Auto categorize transactions based on rules
 - [ ] Auto categorize transactions based on previous categorizations
+- [ ] Add bank accounts automatically
+- [ ] Setup command
